@@ -1,0 +1,174 @@
+USE [Doanweb]
+GO
+
+/****** Object:  Table [dbo].[Users]    Script Date: 12/3/2021 2:18:24 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Users](
+	[MaKH] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[Username] [nvarchar](50) NULL,
+	[Password] [nvarchar](255) NULL,
+	[Phanquyen] [nvarchar](10) NULL,
+	[Ho] [nvarchar](50) NULL,
+	[Ten] [nvarchar](50) NULL,
+	[Email] [nvarchar](MAX) NULL,
+	[SDT] [nvarchar](MAX)NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MaKH] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+USE [Doanweb]
+GO
+
+/****** Object:  Table [dbo].[HoaDon]    Script Date: 12/3/2021 2:19:23 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[HoaDon](
+	[MaHD] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[Ngay] [date] NULL,
+	[TrangThai] [nvarchar](50) NULL,
+	[SoTien] [money] NULL,
+	[MaKH] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MaHD] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[HoaDon]  WITH CHECK ADD  CONSTRAINT [FK_HoaDon_Users] FOREIGN KEY([MaKH])
+REFERENCES [dbo].[Users] ([MaKH])
+GO
+
+ALTER TABLE [dbo].[HoaDon] CHECK CONSTRAINT [FK_HoaDon_Users]
+GO
+
+
+
+USE [Doanweb]
+GO
+
+/****** Object:  Table [dbo].[LoaiSP]    Script Date: 12/3/2021 2:21:18 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[LoaiSP](
+	[MaLoaiSP] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[TenLoaiSP] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MaLoaiSP] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+
+
+USE [Doanweb]
+GO
+
+/****** Object:  Table [dbo].[SanPham]    Script Date: 12/3/2021 2:20:54 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SanPham](
+	[MaSP] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[TenSP] [nvarchar](100) NULL,
+	[MoTaSP] [nvarchar](1000) NULL,
+	[GiaSP] [money] NULL,
+	[AnhSP] [nvarchar](100) NULL,
+	[NGayTaoSP] [date] NULL,
+	[SoLuongSP] [int] NULL,
+	[MaLoaiSP] [int] NULL,
+	[HangSX] [nvarchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MaSP] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[SanPham]  WITH CHECK ADD  CONSTRAINT [FK_SanPham_LoaiSP] FOREIGN KEY([MaLoaiSP])
+REFERENCES [dbo].[LoaiSP] ([MaLoaiSP])
+GO
+
+
+
+
+
+USE [Doanweb]
+GO
+
+/****** Object:  Table [dbo].[CTHoaDon]    Script Date: 12/3/2021 2:19:53 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CTHoaDon](
+	[MaCTHD] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[MaSP] [int] NULL,
+	[MaHD] [int] NULL,
+	[SoLuong] [int] NULL,
+	[MaKH] [int] NOT NULL,
+	[TrangThai] [nvarchar](50) NULL,
+	[SoTien] [money] NULL,
+	[Ngay] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MaCTHD] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[CTHoaDon]  WITH CHECK ADD  CONSTRAINT [FK_CTHoaDon_HoaDon] FOREIGN KEY([MaHD])
+REFERENCES [dbo].[HoaDon] ([MaHD])
+GO
+
+ALTER TABLE [dbo].[CTHoaDon] CHECK CONSTRAINT [FK_CTHoaDon_HoaDon]
+GO
+
+ALTER TABLE [dbo].[CTHoaDon]  WITH CHECK ADD  CONSTRAINT [FK_CTHoaDon_LoaiSP] FOREIGN KEY([MaSP])
+REFERENCES [dbo].[LoaiSP] ([MaLoaiSP])
+GO
+
+ALTER TABLE [dbo].[CTHoaDon] CHECK CONSTRAINT [FK_CTHoaDon_LoaiSP]
+GO
+
+ALTER TABLE [dbo].[CTHoaDon]  WITH CHECK ADD  CONSTRAINT [FK_CTHoaDon_Users] FOREIGN KEY([MaKH])
+REFERENCES [dbo].[Users] ([MaKH])
+GO
+
+ALTER TABLE [dbo].[CTHoaDon] CHECK CONSTRAINT [FK_CTHoaDon_Users]
+GO
+
+
+ALTER TABLE [dbo].[SanPham] CHECK CONSTRAINT [FK_SanPham_LoaiSP]
+GO
+
+
+
+
+
+
